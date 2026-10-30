@@ -24,3 +24,67 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes search-chase-cross {
+  0% {
+    left: 100%;
+    transform: translateY(-50%);
+  }
+  100% {
+    left: -3.25rem;
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes search-chase-bounce {
+  0%, 100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(-2px) rotate(-8deg);
+  }
+}
+
+.search-chase-track {
+  position: relative;
+  display: block;
+  flex: 1;
+  min-width: 5rem;
+  height: 1.25rem;
+  overflow: hidden;
+}
+
+.search-chase-procession {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  display: inline-flex;
+  white-space: nowrap;
+  transform: translateY(-50%);
+  animation: search-chase-cross 4.5s linear infinite;
+}
+
+.search-chase-animal {
+  display: inline-block;
+  animation: search-chase-bounce 0.35s ease-in-out infinite;
+}
+
+.search-chase-animal:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.search-chase-animal:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.search-input:focus + .search-placeholder-cat,
+.search-input:not(:placeholder-shown) + .search-placeholder-cat {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-chase-procession,
+  .search-chase-animal {
+    animation: none;
+  }
+}

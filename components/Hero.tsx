@@ -1,6 +1,3 @@
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-
 export default function Hero() {
     return (
         <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden bg-gradient-to-b from-white to-zinc-50 dark:from-zinc-950 dark:to-zinc-900">
@@ -22,22 +19,6 @@ export default function Hero() {
                 <p className="mt-6 text-lg sm:text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto font-normal">
                     Kết hợp tư duy kỹ thuật hệ thống vững chắc và năng lực phân tích sắc sảo để tạo ra các sản phẩm web chất lượng cao, đáp ứng thực tế.
                 </p>
-
-                <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <Link
-                        href="#products"
-                        className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-200 group"
-                    >
-                        Khám phá sản phẩm
-                        <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                    <Link
-                        href="#contact"
-                        className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-base font-medium text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl transition-all duration-200"
-                    >
-                        Liên hệ với tôi
-                    </Link>
-                </div>
 
                 {/* Social Links */}
                 <div className="mt-12 flex items-center justify-center space-x-6 text-zinc-400 dark:text-zinc-500">
