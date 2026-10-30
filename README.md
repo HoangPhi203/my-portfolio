@@ -20,6 +20,18 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Google and Facebook sign-in
+
+The Sign in and Create account dialogs support Supabase OAuth for Google and Facebook.
+
+1. Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` from your Supabase project.
+2. In Supabase Authentication settings, enable Google and Facebook and configure each provider with its OAuth client credentials. Keep provider client secrets in Supabase; do not put them in browser environment variables.
+3. Add the Supabase callback URL shown in the provider settings to the corresponding Google/Facebook OAuth app.
+4. Add your local and production site URLs to Supabase's allowed redirect URLs. The app redirects OAuth users to the current site origin.
+5. Restart the Next.js server after changing environment variables.
+
+Email/password submission remains a UI placeholder and is not connected to authentication.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
