@@ -20,17 +20,33 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Google and Facebook sign-in
+## Prisma and PostgreSQL
 
-The Sign in and Create account dialogs support Supabase OAuth for Google and Facebook.
+The project uses Prisma ORM 7.10.1 with the PostgreSQL provider. The Prisma schema includes users, tracks, playlists, and the playlist-to-track relationship. User passwords are represented by `passwordHash`; never store plaintext passwords.
 
-1. Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` from your Supabase project.
-2. In Supabase Authentication settings, enable Google and Facebook and configure each provider with its OAuth client credentials. Keep provider client secrets in Supabase; do not put them in browser environment variables.
-3. Add the Supabase callback URL shown in the provider settings to the corresponding Google/Facebook OAuth app.
-4. Add your local and production site URLs to Supabase's allowed redirect URLs. The app redirects OAuth users to the current site origin.
-5. Restart the Next.js server after changing environment variables.
+1. Create a PostgreSQL database with your chosen provider and obtain its connection URI.
+2. Add the URI to the root `.env` file as `DATABASE_URL`. Keep credentials private and percent-encode reserved characters in the username or password:
 
-Email/password submission remains a UI placeholder and is not connected to authentication.
+   ```dotenv
+   DATABASE_URL="postgresql://<USER>:<PASSWORD>@<HOST>:5432/<DATABASE>?sslmode=require"
+   ```
+
+   Replace the placeholders with values from your provider. Keep `.env` out of version control; `.env.example` is only a template.
+3. From the project root, validate the schema, generate Prisma Client, and push the initial schema:
+
+   ```bash
+   npm run db:validate
+   npm run db:generate
+   npm run db:push
+   ```
+
+   `db:push` creates/updates tables without creating migration files. Use it for initial development setup; use reviewed migrations before production schema changes.
+
+Prisma 7 reads its connection URL from `prisma.config.ts`, so the URL belongs in the config rather than in the `datasource` block in `schema.prisma`. If Prisma reports that `DATABASE_URL` is missing, verify it is set in the root `.env` and rerun the command from the project root.
+
+## Authentication
+
+The sign-in and account creation dialogs are UI placeholders and are not connected to an authentication service yet.
 
 ## Learn More
 

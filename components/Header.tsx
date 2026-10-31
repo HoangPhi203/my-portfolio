@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Dancing_Script } from 'next/font/google';
 import { Menu, Search, X } from 'lucide-react';
-import { createClient } from '@supabase/supabase-js';
 
 const brandScript = Dancing_Script({
     subsets: ['latin'],
@@ -67,43 +66,7 @@ function AuthDialog({
     onModeChange: (mode: AuthMode) => void;
 }) {
     const [notice, setNotice] = useState('');
-    const [oauthProvider, setOauthProvider] = useState<'google' | 'facebook' | null>(null);
     const isSignIn = mode === 'sign-in';
-
-    async function signInWithProvider(provider: 'google' | 'facebook') {
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-        if (!supabaseUrl || !supabaseAnonKey) {
-            setNotice('Đăng nhập Google/Facebook chưa được cấu hình. Vui lòng thêm URL và anon key của Supabase.');
-            return;
-        }
-
-        setOauthProvider(provider);
-        setNotice('');
-
-        try {
-            const supabase = createClient(supabaseUrl, supabaseAnonKey);
-            const { error } = await supabase.auth.signInWithOAuth({
-                provider,
-                options: {
-                    redirectTo: window.location.origin,
-                },
-            });
-
-            if (error) {
-                setNotice(`Không thể kết nối ${provider === 'google' ? 'Google' : 'Facebook'}: ${error.message}`);
-                setOauthProvider(null);
-            }
-        } catch (error) {
-            setNotice(
-                error instanceof Error
-                    ? `Không thể kết nối ${provider === 'google' ? 'Google' : 'Facebook'}: ${error.message}`
-                    : 'Không thể kết nối dịch vụ đăng nhập. Vui lòng thử lại.',
-            );
-            setOauthProvider(null);
-        }
-    }
 
     useEffect(() => {
         function handleKeyDown(event: KeyboardEvent) {
@@ -202,46 +165,6 @@ function AuthDialog({
                 </form>
 
                 <div className="mt-5">
-                    <div className="relative mb-4">
-                        <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                            <span className="w-full border-t border-gray-200" />
-                        </div>
-                        <p className="relative mx-auto w-fit bg-white px-3 text-xs text-gray-500">
-                            Hoặc tiếp tục với
-                        </p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                        <button
-                            type="button"
-                            onClick={() => void signInWithProvider('google')}
-                            disabled={oauthProvider !== null}
-                            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5500]/40 disabled:cursor-wait disabled:opacity-60"
-                        >
-                            <svg aria-hidden="true" focusable="false" viewBox="0 0 48 48" className="h-5 w-5 shrink-0">
-                                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5Z" />
-                                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.74 7.18l7.65 5.94c4.47-4.13 7.13-10.2 7.13-17.59Z" />
-                                <path fill="#FBBC05" d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.55 2.56 10.78l7.97-6.19Z" />
-                                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.86l-7.65-5.94c-2.13 1.43-4.85 2.28-8.25 2.28-6.26 0-11.57-4.22-13.47-9.91l-7.97 6.19C6.51 42.62 14.62 48 24 48Z" />
-                            </svg>
-                            Google
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => void signInWithProvider('facebook')}
-                            disabled={oauthProvider !== null}
-                            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5500]/40 disabled:cursor-wait disabled:opacity-60"
-                        >
-                            <svg aria-hidden="true" focusable="false" viewBox="0 0 320 512" className="h-5 w-5 shrink-0 fill-[#0866FF]">
-                                <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06H297V6.26S260.43 0 225.36 0C152.77 0 105.47 44 105.47 123.92v71.42H24.09V288h81.38v224h100.2V288z" />
-                            </svg>
-                            Facebook
-                        </button>
-                    </div>
-                    {oauthProvider && (
-                        <p role="status" className="mt-3 text-center text-sm text-gray-500">
-                            Đang kết nối {oauthProvider === 'google' ? 'Google' : 'Facebook'}…
-                        </p>
-                    )}
                     {notice && (
                         <p role="status" className="mt-3 rounded-xl bg-orange-50 px-4 py-3 text-sm text-orange-800">
                             {notice}
